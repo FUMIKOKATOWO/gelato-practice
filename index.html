@@ -2,16 +2,35 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ジェラート練習</title>
+  <title>ジェラート注文</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container"><img src="avatar.png.png" alt="店員さん" class="clerk"> 
-    <div class="speech">いらっしゃいませ！何にしますか？</div>
-    <button id="micButton">
-      <img src="mic.png.png" alt="マイク">
-    </button>
+  <div class="container">
+    <img src="avatar.png.png" alt="店員さん" class="clerk">
+    <div class="speech">いらっしゃいませ。ゆっくりお選びくださいね。</div>
+
+    <!-- サイズ選択 -->
+    <div class="size-select">
+      <h2>サイズを選んでください</h2>
+      <button id="singleBtn">シングル 🍨</button>
+      <button id="doubleBtn">ダブル 🍨🍨</button>
+    </div>
+
+    <!-- フレーバー選択 -->
+    <div class="flavor-select" style="display:none;">
+      <h2>フレーバーを選んでください</h2>
+      <div id="flavorList"></div>
+      <button id="confirmBtn" style="display:none;">決定</button>
+    </div>
+
+    <!-- 結果表示 -->
+    <div class="result" style="display:none;">
+      <h2>ご注文内容</h2>
+      <p id="orderResult"></p>
+    </div>
   </div>
+
   <script src="main.js"></script>
 </body>
 </html>
