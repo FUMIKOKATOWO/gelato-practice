@@ -7,7 +7,7 @@ window.onload = () => {
   speechSynthesis.speak(greeting);
 };
 
-// 味リスト（あなたの指定）
+// 味リスト
 const flavors = [
   "イチゴ", "イチゴミルク", "バニラ", "イタリアンバニラ", "マスカルポーネ",
   "チョコレート", "チョコミント",
@@ -21,7 +21,7 @@ const flavors = [
 let maxSelect = 1;
 let selectedFlavors = [];
 
-// サイズ選択
+// サイズ選択（ボタン）
 document.getElementById("singleBtn").onclick = () => {
   maxSelect = 1;
   selectedFlavors = [];
@@ -48,35 +48,33 @@ function showFlavorSelect() {
   });
 
   document.querySelector(".flavor-select").style.display = "block";
+
+  // 味の音声認識を開始
+  recognition.start();
 }
 
-// 味選択処理
-function selectFlavor(flavor, btn) {
+// 味選択処理（音声＋ボタン両対応）
+function selectFlavor(flavor, btn = null) {
 
-  // 「味」がついていても許容する（例：イチゴ味 → イチゴ）
-  const normalizedFlavor = flavor.replace("味", "");
+  const normalized = flavor.replace("味", "");
 
-  // 存在しない味を選んだ場合（念のため）
-  if (!flavors.includes(normalizedFlavor)) {
+  if (!flavors.includes(normalized)) {
     speakMessage("別の味を選んでください。");
     return;
   }
 
-  // 選択追加（同じ味はOK）
-  selectedFlavors.push(normalizedFlavor);
-  btn.style.backgroundColor = "#ffddee";
+  selectedFlavors.push(normalized);
 
-  // シングル → 1種類選んだら決定ボタン表示
+  if (btn) btn.style.backgroundColor = "#ffddee";
+
   if (maxSelect === 1 && selectedFlavors.length === 1) {
     document.getElementById("confirmBtn").style.display = "block";
   }
 
-  // ダブル → 1種類だけなら促す
   if (maxSelect === 2 && selectedFlavors.length === 1) {
     speakMessage("もう一種類選んでください。");
   }
 
-  // ダブル → 2種類選んだら決定ボタン表示
   if (maxSelect === 2 && selectedFlavors.length === 2) {
     document.getElementById("confirmBtn").style.display = "block";
   }
@@ -99,3 +97,22 @@ function speakMessage(msg) {
   u.rate = 0.9;
   speechSynthesis.speak(u);
 }
+
+// 音声認識（味だけ）
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = "ja-JP";
+recognition.continuous = true;
+
+// 音声結果
+recognition.onresult = (event) => {
+  const speech = event.results[event.results.length - 1][0].transcript;
+  const normalized = speech.replace("味", "");
+
+  if (flavors.includes(normalized)) {
+    selectFlavor(normalized);
+    speakMessage(`${normalized}ですね。ありがとうございます。`);
+  } else {
+    speakMessage("別の味を選んでください。");
+  }
+};
+
