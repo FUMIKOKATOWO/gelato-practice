@@ -115,4 +115,3 @@ recognition.onresult = (event) => {
     speakMessage("別の味を選んでください。");
   }
 };
-
