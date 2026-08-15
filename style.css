@@ -38,3 +38,12 @@ body {
   background-color: #fff5f8;
   border: 2px solid #ff99bb;
 }
+.size-select button {
+  font-size: 32px;        /* 文字を大きく */
+  padding: 25px 40px;     /* ボタンを大きく */
+  margin: 20px;           /* ボタン同士の間隔 */
+  border-radius: 15px;    /* 角を丸く */
+  background-color: #fff5f8;
+  border: 3px solid #ff99bb;
+  cursor: pointer;
+}
