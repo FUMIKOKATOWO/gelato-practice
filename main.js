@@ -7,16 +7,63 @@ window.onload = () => {
   speechSynthesis.speak(greeting);
 };
 
-// 味リスト
+// 正式フレーバー
 const flavors = [
-  "イチゴ", "イチゴミルク", "バニラ", "イタリアンバニラ", "マスカルポーネ",
-  "チョコレート", "チョコミント",
-  "コーヒー", "自家焙煎コーヒー",
-  "さくらんぼ", "れもん", "ラフランス", "オレンジシャーベット",
-  "べにさやかシャーベット", "サクランボシャーベット", "ラムネ",
-  "黒ゴマ", "ゴマ",
-  "パイン", "パイナップル", "パインシャーベット", "パイナップルシャーベット"
+  "イチゴ",
+  "バニラ",
+  "マスカルポーネ",
+  "チョコレート",
+  "チョコミント",
+  "コーヒー",
+  "さくらんぼ",
+  "れもん",
+  "ラフランス",
+  "オレンジシャーベット",
+  "べにさやかシャーベット",
+  "ラムネ",
+  "黒ゴマ",
+  "パイナップルシャーベット"
 ];
+
+// 子どもが言いそうな別名 → 正式名に変換する辞書
+const aliasMap = {
+  "いちご": "イチゴ",
+  "ストロベリー": "イチゴ",
+
+  "ばにら": "バニラ",
+
+  "ますかるぽーね": "マスカルポーネ",
+
+  "ちょこれーと": "チョコレート",
+  "ちょこ": "チョコレート",
+
+  "ちょこみんと": "チョコミント",
+  "みんと": "チョコミント",
+
+  "こーひー": "コーヒー",
+
+  "さくらんぼ": "さくらんぼ",
+  "チェリー": "さくらんぼ",
+
+  "れもん": "れもん",
+  "レモン": "れもん",
+
+  "らふらんす": "ラフランス",
+
+  "オレンジ": "オレンジシャーベット",
+  "おれんじ": "オレンジシャーベット",
+
+  "べにさやか": "べにさやかシャーベット",
+
+  "らむね": "ラムネ",
+
+  "ごま": "黒ゴマ",
+  "くろごま": "黒ゴマ",
+
+  "パイン": "パイナップルシャーベット",
+  "ぱいん": "パイナップルシャーベット",
+  "パイナップル": "パイナップルシャーベット"
+};
 
 let maxSelect = 1;
 let selectedFlavors = [];
@@ -49,11 +96,10 @@ function showFlavorSelect() {
 
   document.querySelector(".flavor-select").style.display = "block";
 
-  // 味の音声認識を開始
   recognition.start();
 }
 
-// 味選択処理（音声＋ボタン両対応）
+// フレーバー選択処理
 function selectFlavor(flavor, btn = null) {
 
   const normalized = flavor.replace("味", "");
@@ -73,6 +119,7 @@ function selectFlavor(flavor, btn = null) {
 
   if (maxSelect === 2 && selectedFlavors.length === 1) {
     speakMessage("もう一種類選んでください。");
+    recognition.start();
   }
 
   if (maxSelect === 2 && selectedFlavors.length === 2) {
@@ -87,6 +134,11 @@ document.getElementById("confirmBtn").onclick = () => {
 
   document.getElementById("orderResult").textContent =
     selectedFlavors.join(" ＋ ");
+
+  speakMessage("注文成功！！");
+
+  const clap = new Audio("clap.mp3");
+  clap.play();
 };
 
 // 優しい声で案内する関数
@@ -101,16 +153,19 @@ function speakMessage(msg) {
 // 音声認識（味だけ）
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 recognition.lang = "ja-JP";
-recognition.continuous = true;
+recognition.continuous = false;
 
 // 音声結果
 recognition.onresult = (event) => {
-  const speech = event.results[event.results.length - 1][0].transcript;
-  const normalized = speech.replace("味", "");
+  let speech = event.results[0][0].transcript.toLowerCase();
+  speech = speech.replace("味", "").trim();
 
-  if (flavors.includes(normalized)) {
-    selectFlavor(normalized);
-    speakMessage(`${normalized}ですね。ありがとうございます。`);
+  // ゆれを吸収して正式名に変換
+  const mapped = aliasMap[speech] || speech;
+
+  if (flavors.includes(mapped)) {
+    selectFlavor(mapped);
+    speakMessage(`${mapped}ですね。ありがとうございます。`);
   } else {
     speakMessage("別の味を選んでください。");
   }
