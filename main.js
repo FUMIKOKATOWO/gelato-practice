@@ -82,22 +82,37 @@ document.getElementById("doubleBtn").onclick = () => {
 };
 
 // フレーバー選択画面表示
-function showFlavorSelect() {
-  document.querySelector(".size-select").style.display = "none";
-  const list = document.getElementById("flavorList");
-  list.innerHTML = "";
+function selectFlavor(flavor, btn = null) {
 
-  flavors.forEach(f => {
-    const btn = document.createElement("button");
-    btn.textContent = f;
-    btn.onclick = () => selectFlavor(f, btn);
-    list.appendChild(btn);
-  });
+  const normalized = flavor.replace("味", "");
 
-  document.querySelector(".flavor-select").style.display = "block";
+  if (!flavors.includes(normalized)) {
+    speakMessage("別の味を選んでください。");
+    return;
+  }
 
-  recognition.start();
+  selectedFlavors.push(normalized);
+
+  if (btn) btn.style.backgroundColor = "#ffddee";
+
+  // シングルは1回で終了
+  if (maxSelect === 1 && selectedFlavors.length === 1) {
+    recognition.stop();   // ★ここが重要！
+    document.getElementById("confirmBtn").style.display = "block";
+  }
+
+  // ダブルはもう1回聞く
+  if (maxSelect === 2 && selectedFlavors.length === 1) {
+    speakMessage("もう一種類選んでください。");
+    recognition.start();
+  }
+
+  if (maxSelect === 2 && selectedFlavors.length === 2) {
+    recognition.stop();   // ダブルも2つ選んだら止める
+    document.getElementById("confirmBtn").style.display = "block";
+  }
 }
+
 
 // フレーバー選択処理
 function selectFlavor(flavor, btn = null) {
