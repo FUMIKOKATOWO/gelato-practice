@@ -30,3 +30,11 @@ body {
 #micButton img {
   width: 80px;
 }
+.flavor-select button {
+  font-size: 28px;       /* 文字を大きく */
+  padding: 20px 30px;    /* ボタンの内側を広く */
+  margin: 12px;          /* ボタン同士の間隔 */
+  border-radius: 12px;   /* 角を丸く */
+  background-color: #fff5f8;
+  border: 2px solid #ff99bb;
+}
