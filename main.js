@@ -137,7 +137,7 @@ document.getElementById("confirmBtn").onclick = () => {
 
   speakMessage("注文成功！！");
 
-  const clap = new Audio("clap.mp3");
+  const clap = new Audio("clap.mp3.mp3");
   clap.play();
 };
 
