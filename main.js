@@ -81,6 +81,7 @@ document.getElementById("doubleBtn").onclick = () => {
   showFlavorSelect();
 };
 
+
 // フレーバー選択画面表示
 function selectFlavor(flavor, btn = null) {
 
