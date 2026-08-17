@@ -56,4 +56,7 @@ body {
   position: relative;
   z-index: 2; /* ボタンを前面に出す */
 }
+.size-select button {
+  pointer-events: auto;
+}
 
