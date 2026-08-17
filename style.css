@@ -59,4 +59,17 @@ body {
   position: relative;
   z-index: 2; /* ボタンを前面に出す */
 }
+.speech {
+  position: relative;
+  z-index: 1; /* 吹き出しを前面に出しすぎないように */
+}
+
+.size-select {
+  position: relative;
+  z-index: 2; /* ボタンを前面に出す */
+}
+
+.size-select button {
+  pointer-events: auto; /* クリックを有効化 */
+}
 
