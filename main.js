@@ -211,4 +211,4 @@ if (flavors.includes(mapped)) {
     } else {
         speakMessage("別の味を選んでください。");
     }
-}
+}}; 
