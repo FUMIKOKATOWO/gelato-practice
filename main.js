@@ -80,6 +80,13 @@ document.getElementById("doubleBtn").onclick = () => {
   selectedFlavors = [];
   showFlavorSelect();
 };
+// フレーバー選択画面を表示する関数
+function showFlavorSelect() {
+  document.querySelector(".size-select").style.display = "none";  // サイズ選択を非表示
+  document.querySelector(".flavor-select").style.display = "block"; // フレーバー選択を表示
+  recognition.start(); // 音声認識を開始
+}
+
 
 
 // フレーバー選択画面表示
