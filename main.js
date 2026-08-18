@@ -182,19 +182,17 @@ const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognit
 recognition.lang = "ja-JP";
 recognition.continuous = false;
 
-};
-
 recognition.onend = () => {
   console.log("音声認識が終了しました");
 
-  // ダブルで1種類目を選んだ後なら再開する
   if (maxSelect === 2 && selectedFlavors.length === 1) {
     console.log("2種類目のために音声認識を再開します");
     setTimeout(() => {
       recognition.start();
-    }, 1800); // 少し待ってから再スタート
+    }, 1800); // ゆっくり再開
   }
-};
+}; // ← ここにセミコロンが必要！
+
 
 // 音声結果
 recognition.onresult = (event) => {
