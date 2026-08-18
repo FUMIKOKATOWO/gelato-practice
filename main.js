@@ -191,8 +191,7 @@ recognition.onend = () => {
       recognition.start();
     }, 1800); // ゆっくり再開
   }
-}; // ← ここにセミコロンが必要！
-
+};
 
 // 音声結果
 recognition.onresult = (event) => {
