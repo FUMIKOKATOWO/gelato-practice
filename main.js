@@ -140,10 +140,14 @@ function selectFlavor(flavor, btn = null) {
     document.getElementById("confirmBtn").style.display = "block";
   }
 
-  if (maxSelect === 2 && selectedFlavors.length === 1) {
-    speakMessage("もう一種類選んでください。");
-    recognition.start();
-  }
+ if (maxSelect === 2 && selectedFlavors.length === 1) {
+  speakMessage("もう一種類選んでください。");
+  recognition.stop(); // ★ここを追加！
+  setTimeout(() => {
+    recognition.start(); // 少し待ってから再スタート
+  }, 500);
+}
+
 
   if (maxSelect === 2 && selectedFlavors.length === 2) {
     document.getElementById("confirmBtn").style.display = "block";
