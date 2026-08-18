@@ -201,10 +201,14 @@ recognition.onresult = (event) => {
   // ゆれを吸収して正式名に変換
   const mapped = aliasMap[speech] || speech;
 
-  if (flavors.includes(mapped)) {
+if (flavors.includes(mapped)) {
     selectFlavor(mapped);
     speakMessage(`${mapped}ですね。ありがとうございます。`);
-  } else {
-    speakMessage("別の味を選んでください。");
-  }
-};
+} else {
+    // ★ 1種類目のときは「別の味を選んでください」を言わない
+    if (selectedFlavors.length === 0) {
+        speakMessage("ごめんなさい、その味はございません。もう一度お願いします。");
+    } else {
+        speakMessage("別の味を選んでください。");
+    }
+}
