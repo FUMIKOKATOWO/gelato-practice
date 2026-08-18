@@ -184,6 +184,17 @@ recognition.continuous = false;
 recognition.onend = () => {
   console.log("音声認識が終了しました");
 
+  if (maxSelect === 2 && selectedFlavors.length === 1) {
+    console.log("2種類目のために音声認識を再開します");
+    setTimeout(() => {
+      recognition.start();
+    }, 400); // ← 400msが一番安定する
+  }
+};
+
+recognition.onend = () => {
+  console.log("音声認識が終了しました");
+
   // ダブルで1種類目を選んだ後なら再開する
   if (maxSelect === 2 && selectedFlavors.length === 1) {
     console.log("2種類目のために音声認識を再開します");
