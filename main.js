@@ -197,6 +197,15 @@ recognition.onend = () => {
 recognition.onresult = (event) => {
   let speech = event.results[0][0].transcript.toLowerCase();
   speech = speech.replace("味", "").trim();
+  // 語尾のゆれを削除
+speech = speech.replace("ください", "");
+speech = speech.replace("お願いします", "");
+speech = speech.replace("おねがいします", "");
+speech = speech.replace("ちょうだい", "");
+speech = speech.replace("ちょーだい", "");
+speech = speech.replace("です", "");
+speech = speech.trim();
+
 
   // ゆれを吸収して正式名に変換
   const mapped = aliasMap[speech] || speech;
