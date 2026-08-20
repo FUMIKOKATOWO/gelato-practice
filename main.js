@@ -217,7 +217,19 @@ if (flavors.includes(mapped)) {
     // ★ 1種類目のときは「別の味を選んでください」を言わない
     if (selectedFlavors.length === 0) {
         speakMessage("ごめんなさい、その味はございません。もう一度お願いします。");
+
+        // ★ 間違えたときはすぐ再開（子どもが待てないため）
+        setTimeout(() => {
+            recognition.start();
+        }, 600); // ← 0.6秒で再開
+
     } else {
         speakMessage("別の味を選んでください。");
+
+        // ★ 2種類目で間違えたときもすぐ再開
+        setTimeout(() => {
+            recognition.start();
+        }, 600);
     }
-}}; 
+}
+
