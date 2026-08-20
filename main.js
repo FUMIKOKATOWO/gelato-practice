@@ -219,17 +219,18 @@ if (flavors.includes(mapped)) {
         speakMessage("ごめんなさい、その味はございません。もう一度お願いします。");
 
         // ★ 間違えたときはすぐ再開（子どもが待てないため）
-        setTimeout(() => {
-            recognition.start();
-        }, 600); // ← 0.6秒で再開
+     setTimeout(() => {
+    recognition.start();
+}, 600); // ← 0.6秒で再開
 
-    } else {
-        speakMessage("別の味を選んでください。");
+} else {
+    speakMessage("別の味を選んでください。");
 
-        // ★ 2種類目で間違えたときもすぐ再開
-        setTimeout(() => {
-            recognition.start();
-        }, 600);
-    }
+    // ★ 2種類目で間違えたときもすぐ再開
+    setTimeout(() => {
+        recognition.start();
+    }, 600);
+}
+}; // ← ★ここが重要！ recognition.onresult の閉じカッコ＋セミコロン
 }
 
