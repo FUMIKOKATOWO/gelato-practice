@@ -208,22 +208,24 @@ speech = speech.trim();
 
 
   // ゆれを吸収して正式名に変換
-  const mapped = aliasMap[speech] || speech;
+const mapped = aliasMap[speech] || speech;
 
 if (flavors.includes(mapped)) {
     selectFlavor(mapped);
     speakMessage(`${mapped}ですね。ありがとうございます。`);
 
-setTimeout(() => {
-    recognition.start();
-}, 600); // ← 0.6秒で再開
+    // ★ 正しく認識できたときもすぐ再開（テンポを保つ）
+    setTimeout(() => {
+        recognition.start();
+    }, 600); // ← 0.6秒で再開
 
 } else {
     speakMessage("別の味を選んでください。");
 
-    // ★ 2種類目で間違えたときもすぐ再開
+    // ★ 間違えたときもすぐ再開
     setTimeout(() => {
         recognition.start();
     }, 600);
-}
-}; // ← ★ここが重要！ recognition.onresult の閉じカッコ＋セミコロン
+} // ← ★ここで閉じる（onresult の中の if/else の終わり）
+
+}; // ← ★これが recognition.onresult の閉じカッコ＋セミコロン
