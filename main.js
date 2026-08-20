@@ -232,5 +232,4 @@ if (flavors.includes(mapped)) {
     }, 600);
 }
 }; // ← ★ここが重要！ recognition.onresult の閉じカッコ＋セミコロン
-}
 
