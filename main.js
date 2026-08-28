@@ -205,7 +205,7 @@ recognition.onresult = (event) => {
     }
 
     // ★ ダブルの時だけ複数の味を一気に拾う
-   if (maxSelect === 2) {
+  if (maxSelect === 2) {
     const foundFlavors = flavors.filter(f => speech.includes(f));
 
     if (foundFlavors.length > 1) {
@@ -220,6 +220,7 @@ recognition.onresult = (event) => {
     }
     // ★ 1種類しか見つからなかった場合は return しない
 }
+
 
 
 
