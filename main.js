@@ -204,26 +204,25 @@ recognition.onresult = (event) => {
         speech = foundFlavor;
     }
 
-    // ★ ダブルの時だけ複数の味を一気に拾う
-    if (maxSelect === 2) {
-        const foundFlavors = flavors.filter(f => speech.includes(f));
+// ★ ダブルの時だけ複数の味を一気に拾う
+if (maxSelect === 2) {
+    const foundFlavors = flavors.filter(f => speech.includes(f));
 
-        if (foundFlavors.length > 1) {
-            // 2種類まとめて言った場合
-            foundFlavors.forEach(f => {
-                selectFlavor(f);
-                speakMessage(`${f}ですね。ありがとうございます。`);
-            });
+    if (foundFlavors.length > 1) {
+        // 2種類まとめて言った場合
+        foundFlavors.forEach(f => {
+            selectFlavor(f);
+            speakMessage(`${f}ですね。ありがとうございます。`);
+        });
 
-            // ★ ここで終了（単体処理に進ませない）
-            return;
-        }
-        // ★ 1種類しか見つからなかった場合は return しない
+        // ★ ここで終了（単体処理に進ませない）
+        return;
     }
+    // ★ 1種類しか見つからなかった場合は return しない
+}
 
-    // ★ ここで recognition.onresult の関数を閉じる
+// ★ ここで recognition.onresult の関数を閉じる
 };
-
 
 
   // 語尾のゆれを削除
