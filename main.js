@@ -222,7 +222,6 @@ if (maxSelect === 2) {
 }
 
 // ★ ここで recognition.onresult の関数を閉じる
-};
 
 
   // 語尾のゆれを削除
