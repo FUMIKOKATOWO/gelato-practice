@@ -243,23 +243,22 @@ speech = speech.trim();
 
   // ゆれを吸収して正式名に変換
 const mapped = aliasMap[speech] || speech;
-
 if (flavors.includes(mapped)) {
     selectFlavor(mapped);
     speakMessage(`${mapped}ですね。ありがとうございます。`);
 
-    // ★ 正しく認識できたときもすぐ再開（テンポを保つ）
+    // ★ 正しく認識できたときはテンポを速く（0.3秒）
     setTimeout(() => {
         recognition.start();
-    }, 600); // ← 0.6秒で再開
-
+    }, 300); // ← ここを 600 → 300 に変更
 } else {
     speakMessage("別の味を選んでください。");
 
-    // ★ 間違えたときもすぐ再開
+    // ★ 間違えたときは少し遅く（1秒）
     setTimeout(() => {
         recognition.start();
-    }, 600);
+    }, 1000); // ← ここを 600 → 1000 に変更
+}
 } // ← ★ここで閉じる（onresult の中の if/else の終わり）
 
 }; // ← ★これが recognition.onresult の閉じカッコ＋セミコロン
