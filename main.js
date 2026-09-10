@@ -149,7 +149,7 @@ if (maxSelect === 2 && selectedFlavors.length === 1) {
     // ★ 再開は少し遅らせてテンポを保つ
     setTimeout(() => {
         if (!recognition.continuous) { // 二重起動防止
-            recognition.start();
+          
         }
     }, 1000); // ← 1秒待って再開（安定）
 }
@@ -190,15 +190,15 @@ recognition.lang = "ja-JP";
 recognition.continuous = false;
 
 recognition.onend = () => {
-  console.log("音声認識が終了しました");
-
-  if (maxSelect === 2 && selectedFlavors.length === 1) {
-    console.log("2種類目のために音声認識を再開します");
-    setTimeout(() => {
-      recognition.start();
-    }, 1800); // ゆっくり再開
-  }
+    console.log("音声認識が終了しました");
+    // ★ここは削除
+    // if (maxSelect === 2 && selectedFlavors.length === 1) {
+    //     setTimeout(() => {
+    //         recognition.start();
+    //     }, 1800);
+    // }
 };
+
 
 // 音声結果
 recognition.onresult = (event) => {
@@ -235,6 +235,7 @@ else if (foundFlavors.length === 1) {
 
     // ★ 少し待ってから再開（テンポ調整）
     setTimeout(() => {
+       　recognition.stop(); 　　
         recognition.start();
     }, 800); // ← 0.8秒が自然
 }
