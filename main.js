@@ -224,13 +224,18 @@ if (maxSelect === 2) {
 
         // ★ ここで終了（単体処理に進ませない）
         return;
+    } else if (foundFlavors.length === 1) {
+        // ★ 1種類だけ見つかった場合は次の認識をすぐ再開
+        selectFlavor(foundFlavors[0]);
+        speakMessage(`${foundFlavors[0]}ですね。ありがとうございます。`);
+
+        // ★ 少し待ってから再開（テンポ調整）
+        setTimeout(() => {
+            recognition.start();
+        }, 800); // ← 0.8秒が自然
+        return;
     }
-    // ★ 1種類しか見つからなかった場合は return しない
 }
-
-// ★ ここで recognition.onresult の関数を閉じる
-
-
   // 語尾のゆれを削除
 speech = speech.replace("ください", "");
 speech = speech.replace("お願いします", "");
