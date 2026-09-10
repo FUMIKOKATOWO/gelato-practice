@@ -233,7 +233,6 @@ if (maxSelect === 2) {
         setTimeout(() => {
             recognition.start();
         }, 800); // ← 0.8秒が自然
-        return;
     }
 }
   // 語尾のゆれを削除
