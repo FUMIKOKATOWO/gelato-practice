@@ -225,7 +225,7 @@ if (maxSelect === 2) {
         // ★ ここで終了（単体処理に進ませない）
         return;
     }
-    javascript
+    
 else if (foundFlavors.length === 1) {
     selectFlavor(foundFlavors[0]);
     speakMessage(`${foundFlavors[0]}ですね。ありがとうございます。`);
