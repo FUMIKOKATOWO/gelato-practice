@@ -224,16 +224,19 @@ if (maxSelect === 2) {
 
         // ★ ここで終了（単体処理に進ませない）
         return;
-    } else if (foundFlavors.length === 1) {
-        // ★ 1種類だけ見つかった場合は次の認識をすぐ再開
-        selectFlavor(foundFlavors[0]);
-        speakMessage(`${foundFlavors[0]}ですね。ありがとうございます。`);
-
-        // ★ 少し待ってから再開（テンポ調整）
-        setTimeout(() => {
-            recognition.start();
-        }, 800); // ← 0.8秒が自然
     }
+    javascript
+else if (foundFlavors.length === 1) {
+    selectFlavor(foundFlavors[0]);
+    speakMessage(`${foundFlavors[0]}ですね。ありがとうございます。`);
+
+    // ★ 一旦停止してから再開（競合防止）
+    recognition.stop();
+
+    // ★ 少し待ってから再開（テンポ調整）
+    setTimeout(() => {
+        recognition.start();
+    }, 800); // ← 0.8秒が自然
 }
   // 語尾のゆれを削除
 speech = speech.replace("ください", "");
