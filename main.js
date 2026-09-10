@@ -1,10 +1,13 @@
 // 優しい挨拶
 window.onload = () => {
-  const greeting = new SpeechSynthesisUtterance("いらっしゃいませ。ゆっくりお選びくださいね。");
-  greeting.lang = "ja-JP";
-  greeting.pitch = 1.2;
-  greeting.rate = 0.9;
-  speechSynthesis.speak(greeting);
+    const greeting = new SpeechSynthesisUtterance("いらっしゃいませ。ゆっくりお選びくださいね。");
+    greeting.lang = "ja-JP";
+    greeting.pitch = 1.2;
+    greeting.rate = 0.9;
+    speechSynthesis.speak(greeting);
+
+    // ★ 音声認識を初期化（マイクの競合防止）
+    recognition.stop();
 };
 
 // 正式フレーバー
@@ -82,10 +85,15 @@ document.getElementById("doubleBtn").onclick = () => {
 };
 // フレーバー選択画面を表示する関数
 function showFlavorSelect() {
-  document.querySelector(".size-select").style.display = "none";  // サイズ選択を非表示
-  document.querySelector(".flavor-select").style.display = "block"; // フレーバー選択を表示
-  recognition.start(); // 音声認識を開始
+    document.querySelector(".size-select").style.display = "none";
+    document.querySelector(".flavor-select").style.display = "block";
+
+    // ★ 挨拶が終わるまで少し待ってから開始（安定）
+    setTimeout(() => {
+        recognition.start();
+    }, 1500); // ← 1.5秒待つと確実に動く
 }
+
 
 
 
