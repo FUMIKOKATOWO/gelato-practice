@@ -91,7 +91,7 @@ function showFlavorSelect() {
     // ★ 挨拶が終わるまで少し待ってから開始（安定）
     setTimeout(() => {
         recognition.start();
-    }, 1500); // ← 1.5秒待つと確実に動く
+    }, 800); // ← 1.5秒待つと確実に動く
 }
 
 
