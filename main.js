@@ -111,11 +111,13 @@ function selectFlavor(flavor, btn = null) {
 
   if (btn) btn.style.backgroundColor = "#ffddee";
 
-  // シングルは1回で終了
-  if (maxSelect === 1 && selectedFlavors.length === 1) {
-    recognition.stop();   // ★ここが重要！
+ // シングルは1回で終了
+if (maxSelect === 1 && selectedFlavors.length === 1) {
+    recognition.stop(); // 音声認識を止める
+    speakMessage(`${selectedFlavors[0]}ですね。ありがとうございます。`);
     document.getElementById("confirmBtn").style.display = "block";
-  }
+}
+
 
   // ダブルはもう1回聞く
   if (maxSelect === 2 && selectedFlavors.length === 1) {
