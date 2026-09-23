@@ -275,8 +275,7 @@ speech = speech.trim();
 const mapped = aliasMap[speech] || speech;
 if (flavors.includes(mapped)) {
     selectFlavor(mapped);
-    speakMessage(`${mapped}ですね。ありがとうございます。`);
-
+   
     // ★ 正しく認識できたときはテンポを速く（0.3秒）
     setTimeout(() => {
         recognition.start();
