@@ -243,8 +243,7 @@ if (maxSelect === 2) {
         // 2種類まとめて言った場合
         foundFlavors.forEach(f => {
             selectFlavor(f);
-            speakMessage(`${f}ですね。ありがとうございます。`);
-        });
+                   });
 
         // ★ ここで終了（単体処理に進ませない）
         return;
@@ -252,8 +251,7 @@ if (maxSelect === 2) {
     
 else if (foundFlavors.length === 1) {
     selectFlavor(foundFlavors[0]);
-    speakMessage(`${foundFlavors[0]}ですね。ありがとうございます。`);
-
+   
     // ★ 一旦停止してから再開（競合防止）
     recognition.stop();
 
