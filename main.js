@@ -118,7 +118,6 @@ function selectFlavor(flavor, btn = null) {
  // シングルは1回で終了
 if (maxSelect === 1 && selectedFlavors.length === 1) {
     recognition.stop(); // 音声認識を止める
-    speakMessage(`${selectedFlavors[0]}ですね。ありがとうございます。`);
     document.getElementById("confirmBtn").style.display = "block";
 
     // ★ シングルの場合は自動で注文完了を出す
@@ -157,7 +156,6 @@ function selectFlavor(flavor, btn = null) {
 
 if (maxSelect === 1 && selectedFlavors.length === 1) {
     recognition.stop(); // 音声認識を止める
-    speakMessage(`${selectedFlavors[0]}ですね。ありがとうございます。`);
     document.getElementById("confirmBtn").style.display = "block";
 
     // ★ シングルの場合は自動で注文完了を出す
