@@ -6,76 +6,40 @@ window.onload = () => {
     greeting.rate = 0.9;
     speechSynthesis.speak(greeting);
 
-    // ★ 音声認識を初期化（マイクの競合防止）
-    recognition.stop();
+    recognition.stop(); // マイク競合防止
 };
 
 // 正式フレーバー
 const flavors = [
-  "イチゴ",
-  "バニラ",
-  "マスカルポーネ",
-  "チョコレート",
-  "チョコミント",
-  "コーヒー",
-  "さくらんぼ",
-  "レモン",
-  "ラフランス",
-  "オレンジシャーベット",
-  "べにさやかシャーベット",
-  "ラムネ",
-  "黒ゴマ",
-  "パイナップルシャーベット"
+  "イチゴ", "バニラ", "マスカルポーネ", "チョコレート", "チョコミント",
+  "コーヒー", "さくらんぼ", "レモン", "ラフランス", "オレンジシャーベット",
+  "べにさやかシャーベット", "ラムネ", "黒ゴマ", "パイナップルシャーベット"
 ];
 
 // 子どもが言いそうな別名 → 正式名に変換する辞書
 const aliasMap = {
-  "いちご": "イチゴ",
-  "ストロベリー": "イチゴ",
-
+  "いちご": "イチゴ", "ストロベリー": "イチゴ",
   "ばにら": "バニラ",
-
   "ますかるぽーね": "マスカルポーネ",
-
-  "ちょこれーと": "チョコレート",
-  "ちょこ": "チョコレート",
-  "チョコ": "チョコ",
-　"ちょこ": "チョコ",
- "チョコレート": "チョコ",
-    "ここあ": "チョコ",
-
-  "ちょこみんと": "チョコミント",
-  "みんと": "チョコミント",
-
+  "ちょこれーと": "チョコレート", "ちょこ": "チョコレート",
+  "チョコ": "チョコレート", "ここあ": "チョコレート",
+  "ちょこみんと": "チョコミント", "みんと": "チョコミント",
   "こーひー": "コーヒー",
-
-  "さくらんぼ": "さくらんぼ",
-  "チェリー": "さくらんぼ",
-
+  "さくらんぼ": "さくらんぼ", "チェリー": "さくらんぼ",
   "れもん": "レモン",
-  "レモン": "レモン",
-
   "らふらんす": "ラフランス",
-
-  "オレンジ": "オレンジシャーベット",
-  "おれんじ": "オレンジシャーベット",
-
+  "オレンジ": "オレンジシャーベット", "おれんじ": "オレンジシャーベット",
   "べにさやか": "べにさやかシャーベット",
-
   "らむね": "ラムネ",
-
-  "ごま": "黒ゴマ",
-  "くろごま": "黒ゴマ",
-
-  "パイン": "パイナップルシャーベット",
-  "ぱいん": "パイナップルシャーベット",
+  "ごま": "黒ゴマ", "くろごま": "黒ゴマ",
+  "パイン": "パイナップルシャーベット", "ぱいん": "パイナップルシャーベット",
   "パイナップル": "パイナップルシャーベット"
 };
 
 let maxSelect = 1;
 let selectedFlavors = [];
 
-// サイズ選択（ボタン）
+// サイズ選択ボタン
 document.getElementById("singleBtn").onclick = () => {
   maxSelect = 1;
   selectedFlavors = [];
@@ -87,20 +51,18 @@ document.getElementById("doubleBtn").onclick = () => {
   selectedFlavors = [];
   showFlavorSelect();
 };
-// フレーバー選択画面を表示する関数
+
+// フレーバー選択画面を表示
 function showFlavorSelect() {
     document.querySelector(".size-select").style.display = "none";
     document.querySelector(".flavor-select").style.display = "block";
 
-    // ★ 挨拶が終わるまで少し待ってから開始（安定）
     setTimeout(() => {
         recognition.start();
-    }, 800); // ← 1.5秒待つと確実に動く
+    }, 800);
 }
 
-
-
-
+// ★ 完全版 selectFlavor（壊れた部分をすべて除去）
 function selectFlavor(flavor, btn = null) {
 
     const normalized = flavor.replace("味", "");
@@ -123,10 +85,10 @@ function selectFlavor(flavor, btn = null) {
             document.getElementById("confirmBtn").click();
         }, 1000);
 
-        return; // ← ここが重要！シングルはここで終了
+        return;
     }
 
-    // ダブルはもう1回聞く
+    // ダブル1つ目
     if (maxSelect === 2 && selectedFlavors.length === 1) {
         speakMessage("もう一種類選んでください。");
         recognition.start();
@@ -140,54 +102,23 @@ function selectFlavor(flavor, btn = null) {
         return;
     }
 }
-  // ★ シングルの場合は自動で注文完了を出す
-    setTimeout(() => {
-        document.getElementById("confirmBtn").click();
-    }, 1000); // ← 1秒待ってから自動クリック
-}
-
-if (maxSelect === 2 && selectedFlavors.length === 1) {
-    speakMessage("もう一種類選んでください。");
-    
-    // ★ stop() は不要。onend で自動再開するように統一
-    // recognition.stop(); ←削除
-
-    // ★ 再開は少し遅らせてテンポを保つ
-    setTimeout(() => {
-        if (!recognition.continuous) { // 二重起動防止
-          
-        }
-    }, 1000); // ← 1秒待って再開（安定）
-}
-
-
-
-  if (maxSelect === 2 && selectedFlavors.length === 2) {
-    document.getElementById("confirmBtn").style.display = "block";
-  }
-}
 
 // 決定ボタン
 document.getElementById("confirmBtn").onclick = () => {
-  document.querySelector(".flavor-select").style.display = "none";
-  document.querySelector(".result").style.display = "block";
+    document.querySelector(".flavor-select").style.display = "none";
+    document.querySelector(".result").style.display = "block";
 
-  document.getElementById("orderResult").textContent =
-    selectedFlavors.join(" ＋ ");
+    document.getElementById("orderResult").textContent =
+        selectedFlavors.join(" ＋ ");
 
-  // ★ 音声認識を完全に止めてからアナウンスを出す
-  recognition.stop();
+    recognition.stop();
 
-  // ★ 少し待ってからアナウンス（競合防止）
-  setTimeout(() => {
-    const clap = new Audio("clap.mp3.mp3");
-    clap.play();
-    speakMessage("注文成功！！");
-  }, 800); // ← 0.8秒待つと確実に鳴る
-}; // ← ここで閉じる（重要！）
-
-
-
+    setTimeout(() => {
+        const clap = new Audio("clap.mp3.mp3");
+        clap.play();
+        speakMessage("注文成功！！");
+    }, 800);
+};
 
 // 優しい声で案内する関数
 function speakMessage(msg) {
@@ -198,86 +129,57 @@ function speakMessage(msg) {
   speechSynthesis.speak(u);
 }
 
-// 音声認識（味だけ）
+// 音声認識
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 recognition.lang = "ja-JP";
 recognition.continuous = false;
 
 recognition.onend = () => {
     console.log("音声認識が終了しました");
-    // ★ここは削除
-    // if (maxSelect === 2 && selectedFlavors.length === 1) {
-    //     setTimeout(() => {
-    //         recognition.start();
-    //     }, 1800);
-    // }
 };
-
 
 // 音声結果
 recognition.onresult = (event) => {
     let speech = event.results[0][0].transcript.toLowerCase();
     speech = speech.replace("味", "").trim();
 
-    // ★ 柔軟な判定：文章の中に味名が含まれていればOK
     const foundFlavor = flavors.find(f => speech.includes(f));
-    if (foundFlavor) {
-        speech = foundFlavor;
+    if (foundFlavor) speech = foundFlavor;
+
+    // ダブルのとき複数拾う
+    if (maxSelect === 2) {
+        const foundFlavors = flavors.filter(f => speech.includes(f));
+
+        if (foundFlavors.length > 1) {
+            foundFlavors.forEach(f => selectFlavor(f));
+            return;
+        } else if (foundFlavors.length === 1) {
+            selectFlavor(foundFlavors[0]);
+            recognition.stop();
+            setTimeout(() => {
+                recognition.start();
+            }, 800);
+            return;
+        }
     }
 
-// ★ ダブルの時だけ複数の味を一気に拾う
-if (maxSelect === 2) {
-    const foundFlavors = flavors.filter(f => speech.includes(f));
+    // 語尾ゆれ除去
+    speech = speech.replace("ください", "")
+                   .replace("お願いします", "")
+                   .replace("おねがいします", "")
+                   .replace("ちょうだい", "")
+                   .replace("ちょーだい", "")
+                   .replace("です", "")
+                   .trim();
 
-    if (foundFlavors.length > 1) {
-        // 2種類まとめて言った場合
-        foundFlavors.forEach(f => {
-            selectFlavor(f);
-                   });
+    const mapped = aliasMap[speech] || speech;
 
-        // ★ ここで終了（単体処理に進ませない）
-        return;
+    if (flavors.includes(mapped)) {
+        selectFlavor(mapped);
+        setTimeout(() => recognition.start(), 300);
+    } else {
+        speakMessage("別の味を選んでください。");
+        setTimeout(() => recognition.start(), 1000);
     }
-    
-else if (foundFlavors.length === 1) {
-    selectFlavor(foundFlavors[0]);
-   
-    // ★ 一旦停止してから再開（競合防止）
-    recognition.stop();
+};
 
-    // ★ 少し待ってから再開（テンポ調整）
-    setTimeout(() => {
-       　recognition.stop(); 　　
-        recognition.start();
-    }, 800); // ← 0.8秒が自然
-}
-  // 語尾のゆれを削除
-speech = speech.replace("ください", "");
-speech = speech.replace("お願いします", "");
-speech = speech.replace("おねがいします", "");
-speech = speech.replace("ちょうだい", "");
-speech = speech.replace("ちょーだい", "");
-speech = speech.replace("です", "");
-speech = speech.trim();
-
-
-  // ゆれを吸収して正式名に変換
-const mapped = aliasMap[speech] || speech;
-if (flavors.includes(mapped)) {
-    selectFlavor(mapped);
-   
-    // ★ 正しく認識できたときはテンポを速く（0.3秒）
-    setTimeout(() => {
-        recognition.start();
-    }, 300); // ← ここを 600 → 300 に変更
-} else {
-    speakMessage("別の味を選んでください。");
-
-    // ★ 間違えたときは少し遅く（1秒）
-    setTimeout(() => {
-        recognition.start();
-    }, 1000); // ← ここを 600 → 1000 に変更
-}
-} // ← ★ここで閉じる（onresult の中の if/else の終わり）
-
-}; // ← ★これが recognition.onresult の閉じカッコ＋セミコロン
