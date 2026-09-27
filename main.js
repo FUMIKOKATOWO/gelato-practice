@@ -198,23 +198,17 @@ document.getElementById("confirmBtn").onclick = () => {
 
   document.getElementById("orderResult").textContent =
     selectedFlavors.join(" ＋ ");
-// 決定ボタン
-document.getElementById("confirmBtn").onclick = () => {
-    document.querySelector(".flavor-select").style.display = "none";
-    document.querySelector(".result").style.display = "block";
 
-    document.getElementById("orderResult").textContent =
-        selectedFlavors.join(" + ");
+  // ★ 音声認識を完全に止めてからアナウンスを出す
+  recognition.stop();
 
-// ★ 音声認識を完全に止めてからアナウンスを出す
-recognition.stop();
-
-// ★ 少し待ってからアナウンス（競合防止）
-setTimeout(() => {
+  // ★ 少し待ってからアナウンス（競合防止）
+  setTimeout(() => {
     const clap = new Audio("clap.mp3.mp3");
     clap.play();
     speakMessage("注文成功！！");
-}, 800); // ← 0.8秒待つと確実に鳴る
+  }, 800); // ← 0.8秒待つと確実に鳴る
+}; // ← ここで閉じる（重要！）
 
 
 
