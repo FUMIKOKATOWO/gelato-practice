@@ -80,7 +80,7 @@ function showFlavorSelect() {
     }, 800);
 }
 
-// ★ 完全安定版 selectFlavor
+// ★ 完全安定版 selectFlavor（v2）
 function selectFlavor(flavor, btn = null) {
 
     const normalized = flavor.replace("味", "");
@@ -106,10 +106,13 @@ function selectFlavor(flavor, btn = null) {
         return;
     }
 
-    // ダブル1つ目
+    // ダブル1つ目（音声終了後に確実に再開）
     if (maxSelect === 2 && selectedFlavors.length === 1) {
         speakMessage("もう一種類選んでください。");
-        recognition.start();
+
+        setTimeout(() => {
+            recognition.start();
+        }, 1200); // ← 音声終了後に確実に再開
         return;
     }
 
@@ -156,7 +159,7 @@ recognition.onend = () => {
     console.log("音声認識が終了しました");
 };
 
-// ★ 改善版 onresult（ダブルの反応が速くて安定）
+// ★ 改善版 onresult（複合語も確実に拾う）
 recognition.onresult = (event) => {
     let speech = event.results[0][0].transcript.toLowerCase().trim();
 
