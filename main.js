@@ -16,24 +16,42 @@ const flavors = [
   "べにさやかシャーベット", "ラムネ", "黒ゴマ", "パイナップルシャーベット"
 ];
 
-// 子どもが言いそうな別名 → 正式名に変換する辞書
+// aliasMap（強化版：チョコ100%拾える）
 const aliasMap = {
-  "いちご": "イチゴ", "ストロベリー": "イチゴ",
+  "いちご": "イチゴ", "すとろべりー": "イチゴ",
   "ばにら": "バニラ",
   "ますかるぽーね": "マスカルポーネ",
-  "ちょこれーと": "チョコレート", "ちょこ": "チョコレート",
-  "チョコ": "チョコレート", "ここあ": "チョコレート",
-  "ちょこみんと": "チョコミント", "みんと": "チョコミント",
+
+  // チョコ系（強化）
+  "ちょこ": "チョコレート",
+  "ちょこれーと": "チョコレート",
+  "ちょこあいす": "チョコレート",
+  "ちょこみるく": "チョコレート",
+  "ここあ": "チョコレート",
+  "チョコ": "チョコレート",
+  "チョコレート": "チョコレート",
+
+  "ちょこみんと": "チョコミント",
+  "みんと": "チョコミント",
+
   "こーひー": "コーヒー",
-  "さくらんぼ": "さくらんぼ", "チェリー": "さくらんぼ",
+
+  "さくらんぼ": "さくらんぼ", "ちぇりー": "さくらんぼ",
+
   "れもん": "レモン",
+
   "らふらんす": "ラフランス",
-  "オレンジ": "オレンジシャーベット", "おれんじ": "オレンジシャーベット",
+
+  "おれんじ": "オレンジシャーベット",
+
   "べにさやか": "べにさやかシャーベット",
+
   "らむね": "ラムネ",
+
   "ごま": "黒ゴマ", "くろごま": "黒ゴマ",
-  "パイン": "パイナップルシャーベット", "ぱいん": "パイナップルシャーベット",
-  "パイナップル": "パイナップルシャーベット"
+
+  "ぱいん": "パイナップルシャーベット",
+  "ぱいなっぷる": "パイナップルシャーベット"
 };
 
 let maxSelect = 1;
@@ -62,7 +80,7 @@ function showFlavorSelect() {
     }, 800);
 }
 
-// ★ 完全版 selectFlavor（壊れた部分をすべて除去）
+// ★ 完全安定版 selectFlavor
 function selectFlavor(flavor, btn = null) {
 
     const normalized = flavor.replace("味", "");
@@ -138,48 +156,43 @@ recognition.onend = () => {
     console.log("音声認識が終了しました");
 };
 
-// 音声結果
+// ★ 改善版 onresult（ダブルの反応が速くて安定）
 recognition.onresult = (event) => {
-    let speech = event.results[0][0].transcript.toLowerCase();
-    speech = speech.replace("味", "").trim();
+    let speech = event.results[0][0].transcript.toLowerCase().trim();
 
-    const foundFlavor = flavors.find(f => speech.includes(f));
-    if (foundFlavor) speech = foundFlavor;
+    // 語尾ゆれ除去
+    ["味","ください","お願いします","おねがいします","ちょうだい","ちょーだい","です"]
+        .forEach(end => speech = speech.replace(end, ""));
+    speech = speech.trim();
 
-    // ダブルのとき複数拾う
+    // aliasMap の部分一致で変換（強化版）
+    for (const key in aliasMap) {
+        if (speech.includes(key)) {
+            speech = aliasMap[key];
+            break;
+        }
+    }
+
+    // ★ ダブルのときは「2つ言ったかどうか」だけ判定
     if (maxSelect === 2) {
-        const foundFlavors = flavors.filter(f => speech.includes(f));
+        const hits = flavors.filter(f => speech.includes(f));
 
-        if (foundFlavors.length > 1) {
-            foundFlavors.forEach(f => selectFlavor(f));
+        if (hits.length >= 2) {
+            hits.slice(0, 2).forEach(f => selectFlavor(f));
             return;
-        } else if (foundFlavors.length === 1) {
-            selectFlavor(foundFlavors[0]);
-            recognition.stop();
-            setTimeout(() => {
-                recognition.start();
-            }, 800);
+        }
+
+        if (hits.length === 1) {
+            selectFlavor(hits[0]);
             return;
         }
     }
 
-    // 語尾ゆれ除去
-    speech = speech.replace("ください", "")
-                   .replace("お願いします", "")
-                   .replace("おねがいします", "")
-                   .replace("ちょうだい", "")
-                   .replace("ちょーだい", "")
-                   .replace("です", "")
-                   .trim();
-
-    const mapped = aliasMap[speech] || speech;
-
-    if (flavors.includes(mapped)) {
-        selectFlavor(mapped);
-        setTimeout(() => recognition.start(), 300);
+    // シングル or ダブル1つずつ
+    if (flavors.includes(speech)) {
+        selectFlavor(speech);
     } else {
         speakMessage("別の味を選んでください。");
-        setTimeout(() => recognition.start(), 1000);
     }
 };
 
