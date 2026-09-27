@@ -117,13 +117,19 @@ function selectFlavor(flavor, btn = null) {
 
  // シングルは1回で終了
 if (maxSelect === 1 && selectedFlavors.length === 1) {
-    recognition.stop(); // 音声認識を止める
+    // 音声認識を止める
+    recognition.stop();
+
+    // confirmBtn を表示
     document.getElementById("confirmBtn").style.display = "block";
 
-    // ★ シングルの場合は自動で注文完了を出す
+    // ★ stop 完了後にクリックを実行（確実に動作）
     setTimeout(() => {
-        document.getElementById("confirmBtn").click();
-    }, 1000); // ← 1秒待ってから自動クリック
+        const btn = document.getElementById("confirmBtn");
+        if (btn) {
+            btn.click();
+        }
+    }, 1500); // ← 1.5秒待つと安定
 }
 
 
