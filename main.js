@@ -80,7 +80,7 @@ function showFlavorSelect() {
     }, 800);
 }
 
-// ★ 完全安定版 selectFlavor（v3）
+// ★ 完全安定版 selectFlavor（v4）
 function selectFlavor(flavor, btn = null) {
 
     const normalized = flavor.replace("味", "");
@@ -114,9 +114,8 @@ function selectFlavor(flavor, btn = null) {
         u.pitch = 1.2;
         u.rate = 0.9;
 
-        // 喋り終わったら確実に認識再開
         u.onend = () => {
-            recognition.start();
+            recognition.start(); // ← ここが確実に動く
         };
 
         speechSynthesis.speak(u);
@@ -166,16 +165,14 @@ recognition.onend = () => {
     console.log("音声認識が終了しました");
 };
 
-// ★ 改善版 onresult（複合語も確実に拾う）
+// ★ 改善版 onresult（stop を完全に削除）
 recognition.onresult = (event) => {
     let speech = event.results[0][0].transcript.toLowerCase().trim();
 
-    // 語尾ゆれ除去
     ["味","ください","お願いします","おねがいします","ちょうだい","ちょーだい","です"]
         .forEach(end => speech = speech.replace(end, ""));
     speech = speech.trim();
 
-    // aliasMap の部分一致で変換（強化版）
     for (const key in aliasMap) {
         if (speech.includes(key)) {
             speech = aliasMap[key];
@@ -198,7 +195,6 @@ recognition.onresult = (event) => {
         }
     }
 
-    // シングル or ダブル1つずつ
     if (flavors.includes(speech)) {
         selectFlavor(speech);
     } else {
