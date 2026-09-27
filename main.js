@@ -206,18 +206,16 @@ document.getElementById("confirmBtn").onclick = () => {
     document.getElementById("orderResult").textContent =
         selectedFlavors.join(" + ");
 
-    // ★ 音声認識を完全に止めてからアナウンスを出す
-  // ★ 音声認識を完全に止めてからアナウンスを出す
+ // ★ 音声認識を完全に止めてからアナウンスを出す
 recognition.stop();
 
-// ★ stop 完了後にアナウンスを出す（安全なタイミング）
-recognition.onend = () => {
-    setTimeout(() => {
-        const clap = new Audio("clap.mp3.mp3");
-        clap.play();
-        speakMessage("注文成功！！");
-    }, 500); // ← 0.5秒待つと確実に再生される
-};
+// ★ 少し待ってからアナウンス（競合防止）
+setTimeout(() => {
+    const clap = new Audio("clap.mp3.mp3");
+    clap.play();
+    speakMessage("注文成功！！");
+}, 800); // ← 0.8秒待つと確実に鳴る
+
 
 
 // 優しい声で案内する関数
