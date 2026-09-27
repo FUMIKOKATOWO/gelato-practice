@@ -145,17 +145,6 @@ if (maxSelect === 1 && selectedFlavors.length === 1) {
   }
 }
 
-
-// フレーバー選択処理
-function selectFlavor(flavor, btn = null) {
-
-  const normalized = flavor.replace("味", "");
-
-  if (!flavors.includes(normalized)) {
-    speakMessage("別の味を選んでください。");
-    return;
-  }
-
   selectedFlavors.push(normalized);
 
   if (btn) btn.style.backgroundColor = "#ffddee";
