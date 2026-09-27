@@ -206,7 +206,7 @@ document.getElementById("confirmBtn").onclick = () => {
     document.getElementById("orderResult").textContent =
         selectedFlavors.join(" + ");
 
- // ★ 音声認識を完全に止めてからアナウンスを出す
+// ★ 音声認識を完全に止めてからアナウンスを出す
 recognition.stop();
 
 // ★ 少し待ってからアナウンス（競合防止）
@@ -215,6 +215,7 @@ setTimeout(() => {
     clap.play();
     speakMessage("注文成功！！");
 }, 800); // ← 0.8秒待つと確実に鳴る
+
 
 
 
