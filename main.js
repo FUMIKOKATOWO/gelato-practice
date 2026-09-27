@@ -101,59 +101,46 @@ function showFlavorSelect() {
 
 
 
-// フレーバー選択画面表示
 function selectFlavor(flavor, btn = null) {
 
-  const normalized = flavor.replace("味", "");
+    const normalized = flavor.replace("味", "");
 
-  if (!flavors.includes(normalized)) {
-    speakMessage("別の味を選んでください。");
-    return;
-  }
+    if (!flavors.includes(normalized)) {
+        speakMessage("別の味を選んでください。");
+        return;
+    }
 
-  selectedFlavors.push(normalized);
+    selectedFlavors.push(normalized);
 
-  if (btn) btn.style.backgroundColor = "#ffddee";
+    if (btn) btn.style.backgroundColor = "#ffddee";
 
- // シングルは1回で終了
-if (maxSelect === 1 && selectedFlavors.length === 1) {
-    // 音声認識を止める
-    recognition.stop();
+    // シングルは1回で終了
+    if (maxSelect === 1 && selectedFlavors.length === 1) {
+        recognition.stop();
+        document.getElementById("confirmBtn").style.display = "block";
 
-    // confirmBtn を表示
-    document.getElementById("confirmBtn").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("confirmBtn").click();
+        }, 1000);
 
-    // ★ stop 完了後にクリックを実行（確実に動作）
-    setTimeout(() => {
-        const btn = document.getElementById("confirmBtn");
-        if (btn) {
-            btn.click();
-        }
-    }, 1500); // ← 1.5秒待つと安定
+        return; // ← ここが重要！シングルはここで終了
+    }
+
+    // ダブルはもう1回聞く
+    if (maxSelect === 2 && selectedFlavors.length === 1) {
+        speakMessage("もう一種類選んでください。");
+        recognition.start();
+        return;
+    }
+
+    // ダブル2つ目
+    if (maxSelect === 2 && selectedFlavors.length === 2) {
+        recognition.stop();
+        document.getElementById("confirmBtn").style.display = "block";
+        return;
+    }
 }
-
-
-  // ダブルはもう1回聞く
-  if (maxSelect === 2 && selectedFlavors.length === 1) {
-    speakMessage("もう一種類選んでください。");
-    recognition.start();
-  }
-
-  if (maxSelect === 2 && selectedFlavors.length === 2) {
-    recognition.stop();   // ダブルも2つ選んだら止める
-    document.getElementById("confirmBtn").style.display = "block";
-  }
-}
-
-  selectedFlavors.push(normalized);
-
-  if (btn) btn.style.backgroundColor = "#ffddee";
-
-if (maxSelect === 1 && selectedFlavors.length === 1) {
-    recognition.stop(); // 音声認識を止める
-    document.getElementById("confirmBtn").style.display = "block";
-
-    // ★ シングルの場合は自動で注文完了を出す
+  // ★ シングルの場合は自動で注文完了を出す
     setTimeout(() => {
         document.getElementById("confirmBtn").click();
     }, 1000); // ← 1秒待ってから自動クリック
