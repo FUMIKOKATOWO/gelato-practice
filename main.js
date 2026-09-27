@@ -80,7 +80,7 @@ function showFlavorSelect() {
     }, 800);
 }
 
-// ★ 完全安定版 selectFlavor（v2）
+// ★ 完全安定版 selectFlavor（v3）
 function selectFlavor(flavor, btn = null) {
 
     const normalized = flavor.replace("味", "");
@@ -106,13 +106,20 @@ function selectFlavor(flavor, btn = null) {
         return;
     }
 
-    // ダブル1つ目（音声終了後に確実に再開）
+    // ★ ダブル1つ目（音声終了後に確実に再開）
     if (maxSelect === 2 && selectedFlavors.length === 1) {
-        speakMessage("もう一種類選んでください。");
 
-        setTimeout(() => {
+        const u = new SpeechSynthesisUtterance("もう一種類選んでください。");
+        u.lang = "ja-JP";
+        u.pitch = 1.2;
+        u.rate = 0.9;
+
+        // 喋り終わったら確実に認識再開
+        u.onend = () => {
             recognition.start();
-        }, 1200); // ← 音声終了後に確実に再開
+        };
+
+        speechSynthesis.speak(u);
         return;
     }
 
@@ -198,4 +205,3 @@ recognition.onresult = (event) => {
         speakMessage("別の味を選んでください。");
     }
 };
-
